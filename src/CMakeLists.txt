@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.5)
+project(freebsd-free)
+add_compile_options(-std=c++1y)
+add_executable(freebsd-free main.cc memory.cc sysctl.cc)
