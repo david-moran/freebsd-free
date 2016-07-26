@@ -1,3 +1,4 @@
+#include <exception>
 #include <iomanip>
 #include <iostream>
 #include <string>
@@ -35,7 +36,14 @@ int main(int argc, char* argv[])
         }
     }
 
-    show_memory_stats(format);
+    try
+    {
+        show_memory_stats(format);
+    }
+    catch(std::runtime_error& ex)
+    {
+        std::cerr << "Error ocurred: " << ex.what() << std::endl;
+    }
 
     return 0;
 }
@@ -45,18 +53,27 @@ static void show_memory_stats(const T& format)
 {
     freebsd::memory m;
     std::cout 
-              << std::setw(18) << "total"
+              << std::setw(19) << "total"
               << std::setw(14) << "active"
               << std::setw(14) << "inactive"
               << std::setw(14) << "wired"
               << std::setw(14) << "cached"
               << std::setw(14) << "free" << std::endl;
 
-    std::cout << "Mem:" 
+    std::cout << std::setw(5) << "Mem:" 
               << std::setw(14) << (m.total().*format)()
               << std::setw(14) << (m.active().*format)()
               << std::setw(14) << (m.inactive().*format)()
               << std::setw(14) << (m.wired().*format)()
               << std::setw(14) << (m.cached().*format)()
               << std::setw(14) << (m.free().*format)() << std::endl;
+
+    freebsd::swap sw;
+    for (auto device : sw)
+    {
+        std::cout << std::setw(5) << "Swap:"
+                  << std::setw(14) << (device.total().*format)()
+                  << std::setw(70) << (device.free().*format)() << std::endl;
+
+    }
 }
