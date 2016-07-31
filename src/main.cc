@@ -13,7 +13,7 @@ static void show_memory_stats(const T& format);
 int main(int argc, char* argv[])
 {
     int ch;
-    auto format = &freebsd::pages::bytes;
+    auto format = &freebsd::pages::kilobytes;
 
     while((ch = getopt(argc, argv, "bkmg")) != -1)
     {
